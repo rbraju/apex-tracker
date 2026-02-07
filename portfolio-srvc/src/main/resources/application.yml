@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/portfolio_db
+    username: postgres
+    password: P@ssw0rd1
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update  # Automatically create/update tables based on entities
+      show-sql: true    # Show SQL statements in the console. Set to false in production.
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect  # Use PostgreSQL dialect
+server:
+  port: 8081
+
+market-data-srvc:
+  url: http://localhost:8082
