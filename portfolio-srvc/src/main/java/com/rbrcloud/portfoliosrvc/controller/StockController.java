@@ -1,7 +1,7 @@
 package com.rbrcloud.portfoliosrvc.controller;
 
 import com.rbrcloud.portfoliosrvc.entity.Stock;
-import com.rbrcloud.portfoliosrvc.service.StockService;
+import com.rbrcloud.portfoliosrvc.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +16,21 @@ import java.util.List;
 @RequestMapping("/api/v1/stocks")
 public class StockController {
 
-    private final StockService stockService;
+    private final PortfolioService portfolioService;
 
     @Autowired
-    public StockController(StockService stockService) {
-        this.stockService = stockService;
+    public StockController(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
     }
 
     @PostMapping
     public ResponseEntity<Stock> addStock(@RequestBody Stock stock) {
-        Stock newStock = stockService.addStockToPortfolio(stock);
+        Stock newStock = portfolioService.addStockToPortfolio(stock);
         return new ResponseEntity<>(newStock, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<Stock>> getAllStocks() {
-        return ResponseEntity.ok(stockService.getAllStocks());
+        return ResponseEntity.ok(portfolioService.getStocksFromPortfolio());
     }
 }

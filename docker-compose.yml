@@ -1,0 +1,96 @@
+services:
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    networks:
+#      - apex-network
+
+  kafka:
+#    depends_on:
+#      - zookeeper
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_BROKER_ID: 1
+      CLUSTERN_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+      KAFKA_PROCESS_ROLES: "controller,broker"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+    networks:
+      - apex-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: apex-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: P@ssw0rd1
+      POSTGRES_DB: apex
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./portfolio-srvc/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - apex-network
+
+  portfolio-srvc:
+    depends_on:
+      - kafka
+      - postgres
+    build:
+      context: .
+      dockerfile: portfolio-srvc/Dockerfile
+    container_name: portfolio-srvc
+    ports:
+      - "8081:8080"
+    environment:
+      market-data-srvc-url: http://market-data-srvc:8080
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/apex
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: P@ssw0rd1
+    networks:
+      - apex-network
+
+  market-data-srvc:
+    build:
+      context: .
+      dockerfile: market-data-srvc/Dockerfile
+    container_name: market-data-srvc
+    ports:
+      - "8082:8080"
+    networks:
+      - apex-network
+
+  notification-srvc:
+    depends_on:
+      - kafka
+    build:
+      context: .
+      dockerfile: notification-srvc/Dockerfile
+    container_name: notification-srvc
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    networks:
+      - apex-network
+
+networks:
+  apex-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

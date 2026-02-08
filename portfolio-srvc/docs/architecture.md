@@ -17,7 +17,7 @@ Managed by Hibernate.
 | `purchase_price`| Decimal(10,2)| Not Null |
 
 ## 4. Business Rules & Validation
-Validated in the Service layer (`StockService`):
+Validated in the Service layer (`PortfolioService`):
 * **Quantity**: Must be greater than 0. If 0 or less, `IllegalArgumentException` is thrown.
 * **Symbol**: Must not be null or empty.
 

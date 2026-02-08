@@ -103,7 +103,7 @@
         </dependency>
         <dependency>
             <groupId>com.rbr.apex</groupId>
-            <artifactId>shared-dto</artifactId>
+            <artifactId>shared-lib</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

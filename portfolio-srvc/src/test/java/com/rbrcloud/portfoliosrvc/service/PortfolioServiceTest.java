@@ -1,7 +1,7 @@
 package com.rbrcloud.portfoliosrvc.service;
 
 import com.rbrcloud.portfoliosrvc.entity.Stock;
-import com.rbrcloud.portfoliosrvc.repository.StockRepository;
+import com.rbrcloud.portfoliosrvc.repository.PortfolioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,27 +15,27 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StockServiceTest {
+public class PortfolioServiceTest {
 
     @Mock
-    private StockRepository stockRepository;
+    private PortfolioRepository portfolioRepository;
 
     @InjectMocks
-    private StockService stockService;
+    private PortfolioService portfolioService;
 
     @Test
     public void addValidStockToPortfolio_returnsStock() {
         // Arrange
         Stock stock = new Stock(null, "MSFT", 30, BigDecimal.valueOf(395.35));
-        when(stockRepository.save(any(Stock.class))).thenReturn(stock);
+        when(portfolioRepository.save(any(Stock.class))).thenReturn(stock);
 
         // Act
-        Stock savedStock = stockService.addStockToPortfolio(stock);
+        Stock savedStock = portfolioService.addStockToPortfolio(stock);
 
         // Assert
         assertNotNull(savedStock);
         assertEquals(stock.getSymbol(), savedStock.getSymbol());
-        verify(stockRepository, times(1)).save(stock);
+        verify(portfolioRepository, times(1)).save(stock);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class StockServiceTest {
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
-            stockService.addStockToPortfolio(stock);
+            portfolioService.addStockToPortfolio(stock);
         });
-        verify(stockRepository, never()).save(any(Stock.class));
+        verify(portfolioRepository, never()).save(any(Stock.class));
     }
 }

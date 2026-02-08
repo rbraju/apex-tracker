@@ -26,7 +26,8 @@
     <modules>
         <module>portfolio-srvc</module>
         <module>market-data-srvc</module>
-        <module>shared-dto</module>
+        <module>notification-srvc</module>
+        <module>shared-lib</module>
     </modules>
 
     <dependencyManagement>

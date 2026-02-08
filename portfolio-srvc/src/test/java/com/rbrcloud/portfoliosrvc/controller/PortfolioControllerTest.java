@@ -1,9 +1,8 @@
 package com.rbrcloud.portfoliosrvc.controller;
 
 import com.rbrcloud.portfoliosrvc.entity.Stock;
-import com.rbrcloud.portfoliosrvc.service.StockService;
+import com.rbrcloud.portfoliosrvc.service.PortfolioService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -22,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(StockController.class)
-public class StockControllerTest {
+public class PortfolioControllerTest {
 
     @Autowired
     private MockMvc mockMvc;            // To simulate HTTP requests
@@ -31,14 +30,14 @@ public class StockControllerTest {
     private ObjectMapper objectMapper;  // To handle JSON conversion
 
     @MockitoBean
-    private StockService stockService;
+    private PortfolioService portfolioService;
 
     @Test
     public void validRequest() throws Exception {
         Stock stock = new Stock(null, "JPM", 25, new BigDecimal("322.50"));
 
         Stock savedStock = new Stock(1L, "JPM", 25, new BigDecimal("322.50"));
-        when(stockService.addStockToPortfolio(any(Stock.class))).thenReturn(savedStock);
+        when(portfolioService.addStockToPortfolio(any(Stock.class))).thenReturn(savedStock);
 
         mockMvc.perform(
                 post("/api/v1/stocks")

@@ -1,7 +1,7 @@
 package com.rbrcloud.portfoliosrvc.service;
 
 import com.rbrcloud.portfoliosrvc.entity.Stock;
-import com.rbrcloud.portfoliosrvc.repository.StockRepository;
+import com.rbrcloud.portfoliosrvc.repository.PortfolioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +16,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
-public class StockServiceIT {
+public class PortfolioServiceIT {
 
     @Autowired
-    private StockService stockService;
+    private PortfolioService portfolioService;
 
     @Autowired
-    private StockRepository stockRepository;
+    private PortfolioRepository portfolioRepository;
 
     @BeforeEach
     public void setup() {
-        stockRepository.deleteAll();
+        portfolioRepository.deleteAll();
     }
 
     @Test
     public void addStockToPortfolio() {
         Stock stock = new Stock(null, "BAC", 20, BigDecimal.valueOf(56.66));
-        Stock savedStock = stockService.addStockToPortfolio(stock);
+        Stock savedStock = portfolioService.addStockToPortfolio(stock);
 
         assertNotNull(savedStock.getId());
         assertEquals(stock.getSymbol(), savedStock.getSymbol());
 
         // Verify in DB
-        List<Stock> stocks = stockRepository.findAll();
+        List<Stock> stocks = portfolioRepository.findAll();
         assertEquals(1, stocks.size());
         assertEquals(stock.getSymbol(), stocks.getFirst().getSymbol());
     }

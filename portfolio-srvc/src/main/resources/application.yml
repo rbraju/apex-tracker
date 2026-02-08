@@ -1,18 +1,29 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/portfolio_db
-    username: postgres
+    url: jdbc:postgresql://postgres:5432/apex
+    username: user
     password: P@ssw0rd1
     driver-class-name: org.postgresql.Driver
+
   jpa:
+    # JPA specific properties (how spring interacts with database)
     hibernate:
       ddl-auto: update  # Automatically create/update tables based on entities
-      show-sql: true    # Show SQL statements in the console. Set to false in production.
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect  # Use PostgreSQL dialect
+    show-sql: true      # Show SQL statements in the console. Set to false in production.
+
+    # Hibernate specific implementation properties (direct to hibernate)
+    properties:
+      hibernate:
+        default_schema: portfolio
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Use PostgreSQL dialect
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 server:
-  port: 8081
+  port: 8080
 
 market-data-srvc:
-  url: http://localhost:8082
+  url: http://market-data-srvc:8082

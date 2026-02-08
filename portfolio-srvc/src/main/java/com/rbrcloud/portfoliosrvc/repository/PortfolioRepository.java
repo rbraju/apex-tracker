@@ -10,7 +10,7 @@ import java.util.List;
  * Repository interface for managing Stock entities.
  */
 @Repository
-public interface StockRepository extends JpaRepository<Stock, Long> {
+public interface PortfolioRepository extends JpaRepository<Stock, Long> {
 
     List<Stock> findBySymbol(String symbol);
 }

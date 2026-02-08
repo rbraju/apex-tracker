@@ -1,0 +1,6 @@
+# application-test.yml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/portfolio_db
+    username: user
+    password: P@ssw0rd1# Local DB

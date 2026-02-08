@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>shared-dto</artifactId>
+    <artifactId>shared-lib</artifactId>
     <packaging>jar</packaging>
 
-    <name>shared-dto</name>
+    <name>shared-lib</name>
     <description>Shared DTOs.</description>
 
     <properties>
